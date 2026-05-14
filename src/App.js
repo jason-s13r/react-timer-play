@@ -15,8 +15,10 @@ export default function App() {
     <div>
       <Timer Hz={12} running={running} reset={reset} />
       <Timer Hz={24} running={running} reset={reset} />
+      <Timer Hz={3} running={running} reset={reset} />
       <Timer Hz={2} running={running} reset={reset} />
       <Timer Hz={1} running={running} reset={reset} />
+      <Timer Hz={1/5} running={running} reset={reset} />
       {running ?
         <button onClick={onStop}>stop</button> :
         <button onClick={onStart}>start</button>}

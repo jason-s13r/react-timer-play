@@ -24,7 +24,7 @@ export default function App() {
     if (endTime) {
       setPausedDuration((paused) => paused.add(now.since(endTime)));
     }
-    setIntervalId(setInterval(() => setEndTime(Temporal.Now.instant())));
+    setIntervalId(setInterval(() => setEndTime(Temporal.Now.instant()), 1000 / 24));
   };
 
   const stop = () => {

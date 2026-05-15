@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const format = duration => {
   return new Intl.DurationFormat('en-NZ', {
@@ -11,30 +11,33 @@ const format = duration => {
 }
 
 export default function Timer({ Hz, running, reset }) {
+  const expected = Temporal.Duration.from({ microseconds: Math.trunc(1000_000 / Hz) });
   const [startTime, setStartTime] = useState(undefined);
   const [endTime, setEndTime] = useState(undefined);
   const [totalDuration, setTotalDuration] = useState(new Temporal.Duration());
   const [pausedDuration, setPausedDuration] = useState(new Temporal.Duration());
-  const [intervalId, setIntervalId] = useState(-1);
 
+  const intervalRef = useRef(-1);
   const start = () => {
-    const now = Temporal.Now.instant();
-    setEndTime(now);
+    const initial = Temporal.Now.instant();
+    setEndTime(initial);
     if (!startTime) {
-      setStartTime(now);
+      setStartTime(initial);
     }
     if (endTime) {
-      setPausedDuration((paused) => paused.add(now.since(endTime)));
+      setPausedDuration((paused) => paused.add(initial.since(endTime)));
     }
 
-    setIntervalId(setInterval(() => setEndTime(Temporal.Now.instant()), 1000 / Hz));
+    intervalRef.current = setInterval(() => {
+      const instant = Temporal.Now.instant();
+      setEndTime(instant);
+    }, 1000 / Hz);
   }
 
   const stop = () => {
-    const now = Temporal.Now.instant();
-    setEndTime(now);
-    clearInterval(intervalId);
-    setIntervalId(-1);
+    setEndTime(Temporal.Now.instant());
+    clearInterval(intervalRef.current);
+    intervalRef.current = -1;
   };
 
   const onReset = () => {
@@ -44,37 +47,30 @@ export default function Timer({ Hz, running, reset }) {
     setPausedDuration(new Temporal.Duration());
   };
 
-  useEffect(() => running ? start() : stop(), [running]);
+  useEffect(() => {
+    running ? start() : stop();
+    return () => {
+      clearInterval(intervalRef.current);
+      intervalRef.current = -1;
+    };
+  }, [running]);
+
   useEffect(() => onReset(), [reset]);
   useEffect(() => {
     setTotalDuration(
       endTime?.since(startTime ?? endTime, {
         largestUnit: 'hours',
-        smallestUnit: 'microseconds',
+        smallestUnit: 'millisecond',
       }) ?? new Temporal.Duration()
     );
   }, [endTime, startTime]);
 
 
+
   return (
     <div>
       <big>{format(totalDuration.subtract(pausedDuration))}</big>
-      <small>@ {Hz} Hz</small>
-      <pre>
-        <div>
-          start time:{' '}
-          {startTime ? startTime.toString() : '-'}
-        </div>
-        <div>
-          end time:{' '}
-          {endTime && startTime !== endTime ? endTime.toString() : '-'}
-        </div>
-        <div>{'+ elapsed:'} {format(totalDuration)}</div>
-        <div>{'-  paused:'} {format(pausedDuration)}</div>
-        <div>
-          {'=   timed:'} {format(totalDuration.subtract(pausedDuration))}
-        </div>
-      </pre>
+      <small>@ {Hz} Hz (every {expected.total('millisecond')}ms)</small>
     </div>
   );
 }

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <link rel="stylesheet" href="style.scss" />
+  </head>
+  <body>
+    <h1>Timer</h1>
+
+    <web-timer Hz="100" ></web-timer>
+
+    <div class="blurb highlight tertiary">
+      <h2>Timer</h2>
+      <p>A timer that uses the <code>Temporal</code> API.</p>
+      <p>
+        Measurement is based on duration between <em>start</em> time and the <em>end</em> time, subtracting any accumulated paused time.<br />
+        The end time is updated frequently using <code>setInterval</code>.</p>
+
+        <p>Update frequency is configured to 100Hz, or every 10ms.</p>
+    </div>
+
+    <div class="blurb tertiary columns">
+      <p>Made by <a href="https://1j.nz">Jason</a>.</p>
+      <p>
+        github:
+        <a href="https://github.com/jason-s13r/timer-web"
+          >jason-s13r/timer-web</a
+        >
+      </p>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

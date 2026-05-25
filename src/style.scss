@@ -1,0 +1,55 @@
+html {
+  color-scheme: light dark;
+  font-family: system-ui;
+}
+
+body {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+
+  margin: 0.5rem auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 800px;
+}
+
+web-timer {
+  align-self: center;
+}
+
+
+.blurb {
+  border: solid 1px transparent;
+  padding: 0.5rem;
+}
+
+.blurb h2 {
+  margin: 0;
+}
+.blurb p {
+  margin: 0.75em 0 0;
+}
+
+.blurb.highlight {
+  color: light-dark(#555, #bbb);
+  border: solid 1px light-dark(#eee, #444);
+  background: light-dark(#f9f9f9, rgba(40, 40, 40, 0.25));
+}
+
+.blurb.secondary {
+  font-size: 0.85rem;
+}
+.blurb.tertiary {
+  font-size: 0.75rem;
+}
+
+
+.blurb.columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

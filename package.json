@@ -20,6 +20,7 @@
     "typescript": "^6.0.3"
   },
   "devDependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
     "@parcel/transformer-sass": "^2.16.4",
     "@r2wc/react-to-web-component": "^2.1.1",
     "@types/react": "^19.2.15",

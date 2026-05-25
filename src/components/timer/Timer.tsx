@@ -1,5 +1,15 @@
 import { useState, useRef, useEffect } from "react";
+import * as polyfill from '@js-temporal/polyfill';
 import "./Timer.scss";
+
+if (!globalThis.Temporal) {
+  (globalThis as any).Temporal = polyfill.Temporal;
+}
+
+if (!globalThis.Intl) {
+  (globalThis as any).Intl = polyfill.Intl;
+}
+
 
 export type TimerProps = {
   Hz: number;
